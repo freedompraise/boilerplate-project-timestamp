@@ -20,11 +20,28 @@ app.get("/", function (req, res) {
 
 
 // your first API endpoint... 
-app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
+app.get("/api/:date", function (req, res) {
+  let dateStr = req.params.date;
+  let date;
+
+  // Check if dateStr is a unix timestamp (all digits)
+  if (/^\d+$/.test(dateStr)) {
+    date = new Date(parseInt(dateStr));
+  } else {
+    date = new Date(dateStr);
+  }
+
+  // Check if date is valid
+  if (date.toString() === "Invalid Date") {
+    res.json({ error: "Invalid Date" });
+    return;
+  }
+
+  res.json({
+    unix: date.getTime(),
+    utc: date.toUTCString()
+  });
 });
-
-
 
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
