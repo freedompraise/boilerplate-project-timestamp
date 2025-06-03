@@ -20,12 +20,16 @@ app.get("/", function (req, res) {
 
 
 // your first API endpoint... 
-app.get("/api/:date", function (req, res) {
+app.get("/api/:date?", function (req, res) {
   let dateStr = req.params.date;
   let date;
 
+  // If no date provided, use current time
+  if (!dateStr) {
+    date = new Date();
+  }
   // Check if dateStr is a unix timestamp (all digits)
-  if (/^\d+$/.test(dateStr)) {
+  else if (/^\d+$/.test(dateStr)) {
     date = new Date(parseInt(dateStr));
   } else {
     date = new Date(dateStr);
